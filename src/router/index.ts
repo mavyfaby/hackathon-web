@@ -29,7 +29,7 @@ const router = createRouter({
   routes
 });
 
-router.afterEach((to, from, next) => {
+router.afterEach(to => {
   setPage(to.name?.toString() || "Employee Tracker");
 });
 
