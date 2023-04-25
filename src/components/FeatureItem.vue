@@ -18,6 +18,7 @@
 </template>
 
 <script setup lang="ts">
+import router from '../router';
 import VButton from './button/VButton.vue';
 
 defineProps({
@@ -35,13 +36,13 @@ defineProps({
  * View data based on the path of the feature.
  */
 function view(path: string) {
-  console.log(path);
+  router.push({ path });
 }
 </script>
 
 <style lang="scss" scoped>
 .item {
-  @apply flex gap-x-8 justify-between border-slate-300 w-full p-4 hover:bg-slate-100;
+  @apply flex gap-x-8 justify-between border-slate-300 w-full px-4 py-2 hover:bg-slate-100;
 
   &:hover {
     .actions {
@@ -63,7 +64,7 @@ function view(path: string) {
 }
 
 p {
-  @apply my-0 py-0 font-medium;
+  @apply my-0 py-0 font-medium text-slate-700 text-sm;
 }
 
 .placeholder {
