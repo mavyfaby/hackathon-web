@@ -7,7 +7,7 @@
     </div>
     <div class="flex relative">
       <div class="actions">
-        <VButton @click="view(path)" text>View</VButton>
+        <md-filled-button @click="view(path)" text>View</md-filled-button>
       </div>
 
       <div class="placeholder">
@@ -19,7 +19,6 @@
 
 <script setup lang="ts">
 import router from '../router';
-import VButton from './button/VButton.vue';
 
 defineProps({
   name: {

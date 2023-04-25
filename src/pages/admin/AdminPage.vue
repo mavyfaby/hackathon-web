@@ -6,7 +6,7 @@
       <div class="list-outer">
         <div class="list">
           <FeatureItem
-            v-for="(feature, i) in values.admin.features"
+            v-for="(feature, i) in admin.features"
             :name="feature.name"
             :path="feature.path"
             :key="i"
@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import AppBar from '../../components/appbar/AppBar.vue';
 import FeatureItem from '../../components/FeatureItem.vue';
-import { values } from "../../values"; 
+import { admin } from "../../values"; 
 
 </script>
 

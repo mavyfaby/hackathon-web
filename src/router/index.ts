@@ -4,8 +4,8 @@ import { setPage } from "../utils/page";
 const routes = [
   {
     path: "/",
-    name: "Home",
-    component: () => import("../pages/home/HomePage.vue")
+    name: "Landing",
+    component: () => import("../pages/LandingPage.vue")
   },
   {
     path: '/login',

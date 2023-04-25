@@ -9,7 +9,9 @@
 </template>
 
 <script setup lang="ts">
+import { setDefaultTheme } from './utils/theme';
 
+setDefaultTheme();
 </script>
 
 <style lang="scss" scoped>

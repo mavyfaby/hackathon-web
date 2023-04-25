@@ -1,12 +1,11 @@
 <template>
   <div class="absolute top-0 left-0 right-0 flex justify-between items-center p-6">
     <h4>{{ title }}</h4>
-    <VButton @click="toLogout">Logout</VButton>
+    <slot name="actions" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import VButton from '../button/VButton.vue';
 // import { useRouter } from 'vue-router';
 
 defineProps({
@@ -25,6 +24,6 @@ function toLogout() {
 
 <style lang="scss" scoped>
 h4 {
-  @apply font-bold text-xl text-slate-600;
+  @apply font-bold text-xl text-on-surface;
 }
 </style>

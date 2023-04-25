@@ -12,7 +12,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(team, i) in values.teams" :key="i" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+            <tr v-for="(team, i) in teams" :key="i" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
               <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ i + 1 }}</td>
               <td class="px-6 py-4">{{ team }}</td>
             </tr>
@@ -25,7 +25,7 @@
 
 <script lang="ts" setup>
 import AppBar from '../../components/appbar/AppBar.vue';
-import { values } from "../../values";
+import { teams } from "../../values";
 </script>
 
 <style lang="scss" scoped>
