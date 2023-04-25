@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+@import '@material-symbols/font-600/rounded.css';
+
+:root {
+  --md-icon-font: 'Material Symbols Rounded';
+  --md-icon-weight: 500;
+  --md-icon-button-icon-size: 18px;
+
+  // Temporary fix for components not being themed
+  --md-dialog-container-color: var(--md-sys-color-inverse-on-surface);
+  --md-sys-color-surface-container-highest: var(--md-sys-color-surface-variant);
+  --md-navigation-bar-hover-state-layer-opacity: 0;
+
+  scroll-behavior: smooth;
+}
+
 body {
   @apply h-screen;
 }
@@ -18,8 +33,4 @@ body {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-}
-
-.table {
-  
 }

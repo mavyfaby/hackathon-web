@@ -1,39 +1,31 @@
 <template>
   <div class="container mx-auto px-4 h-full flex items-center">
-    <AppBar title="Admin Page" />
-
-    <div class="list-container">
-      <div class="list-outer">
-        <div class="list">
-          <FeatureItem
-            v-for="(feature, i) in admin.features"
-            :name="feature.name"
-            :path="feature.path"
-            :key="i"
-          />
-        </div>
-      </div>
+    <div class="flex gap-10 flex-col justify-center items-center w-full h-full">
+      <h4>Admin Feature List</h4>
+      <md-list class="w-3/4">
+        <md-list-item
+          v-for="(feature, i) in admin.features"
+          :key="i"
+          :headline="feature.name"
+          @click="view(feature.path)"
+          trailingSupportingText="Select"
+        />
+      </md-list>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import AppBar from '../../components/appbar/AppBar.vue';
-import FeatureItem from '../../components/FeatureItem.vue';
-import { admin } from "../../values"; 
+import { admin } from "~/values"; 
+import router from "~/router";
 
+function view(path: string) {
+  router.push({ path });  
+}
 </script>
 
 <style lang="scss" scoped>
-.list {
-  @apply flex justify-center flex-col items-center h-full;
-}
-
-.list-container {
-  @apply flex w-full justify-center border-slate-600;
-}
-
-.list-outer {
-  @apply flex flex-col border border-slate-300 rounded-xl w-full lg:w-1/2 bg-slate-50;
+h4 {
+  @apply text-center text-2xl font-bold text-on-surface-variant;
 }
 </style>

@@ -14,3 +14,6 @@ import "@material/web/dialog/dialog";
 
 import "@material/web/circularprogress/circular-progress"
 import "@material/web/linearprogress/linear-progress"
+
+import "@material/web/list/list"
+import "@material/web/list/list-item"
