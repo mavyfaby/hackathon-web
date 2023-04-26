@@ -40,8 +40,8 @@ function select() {
     return;
   }
 
-  makeRequest("POST", Endpoints.Team, { name: name.value }, (response) => {
-    if (!response.success) {
+  makeRequest("POST", Endpoints.Team, { name: name.value }, (err, response) => {
+    if (err || !response.success) {
       showToast(TYPE.ERROR, "Failed to add team");
       return;
     }

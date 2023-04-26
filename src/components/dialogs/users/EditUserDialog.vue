@@ -148,7 +148,6 @@ import { ref } from "vue";
 import { useStore } from "~/store";
 
 import { Users } from "~/types";
-import { departments, teams } from "~/values";
 
 const store = useStore();
 const type = ref(Users.ADMIN);
@@ -176,23 +175,23 @@ const username = ref("");
 const password = ref("");
 
 function searchOpen(type: string) {
-  store.dialog.search.open({
-    data: ['designation', 'team'].includes(type) ? teams : departments,
-    title: "Select a " + (type === 'team' ? 'team' : 'department'),
-    nameKey: 'name',
-    valueKey: 'id',
-    callback: (value: string) => {
-      if (type === 'team') {
-        return teamName.value = value;
-      }
+  // store.dialog.search.open({
+  //   data: ['designation', 'team'].includes(type) ? teams : departments,
+  //   title: "Select a " + (type === 'team' ? 'team' : 'department'),
+  //   nameKey: 'name',
+  //   valueKey: 'id',
+  //   callback: (value: string) => {
+  //     if (type === 'team') {
+  //       return teamName.value = value;
+  //     }
 
-      if (type === 'designation') {
-        return designation.value = value;
-      }
+  //     if (type === 'designation') {
+  //       return designation.value = value;
+  //     }
 
-      return deptName.value = value;
-    }
-  })
+  //     return deptName.value = value;
+  //   }
+  // })
 }
 
 function onSelectType(t: Users) {

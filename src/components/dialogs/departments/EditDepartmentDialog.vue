@@ -48,8 +48,8 @@ function onClose() {
 }
 
 function onEdit() {
-  makeRequest("PUT", Endpoints.Department + "/" + store.dialog.editDepartment.dept.id, { name: name.value }, (response) => {
-    if (!response.success) {
+  makeRequest("PUT", Endpoints.Department + "/" + store.dialog.editDepartment.dept.id, { name: name.value }, (err, response) => {
+    if (err || !response.success) {
       showToast(TYPE.ERROR, "Failed to edit department");
       return;
     }

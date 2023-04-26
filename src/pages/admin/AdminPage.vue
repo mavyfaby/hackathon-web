@@ -54,20 +54,25 @@
 
 <script setup lang="ts">
 import makeRequest, { Endpoints } from "~/network/request";
+import { TYPE } from "vue-toastification";
 
 import { ref, onMounted } from "vue";
 import router from "~/router";
+import showToast from "~/utils/toast";
 
 const isLoading = ref(true);
 const data = ref(<any>[]);
 
 onMounted(() => {
-  makeRequest("GET", Endpoints.AdminMasterPage, null, (res) => {
+  makeRequest("GET", Endpoints.AdminMasterPage, null, (err, res) => {
+    if (err) {
+      showToast(TYPE.ERROR, "Failed to fetch master page");
+      return;
+    }
+
     for (const d of res[0]) {
       data.value.push(d);
     }
-
-    console.log(res);
 
     isLoading.value = false;
   });

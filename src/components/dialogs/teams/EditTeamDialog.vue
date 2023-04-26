@@ -47,8 +47,8 @@ function onClose() {
 }
 
 function onEdit() {
-  makeRequest("PUT", Endpoints.Team + "/" + store.dialog.editTeam.team.id, { name: name.value }, (response) => {
-    if (!response.success) {
+  makeRequest("PUT", Endpoints.Team + "/" + store.dialog.editTeam.team.id, { name: name.value }, (err, response) => {
+    if (err || !response.success) {
       showToast(TYPE.ERROR, "Failed to edit team");
       return;
     }

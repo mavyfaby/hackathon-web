@@ -19,7 +19,7 @@ const instance = axios.create({
 /**
  * Make a request to the Fireduino API
  */
-function makeRequest(method: HttpMethod, endpoint: string, data: any, callback: (response: any) => void) {
+function makeRequest(method: HttpMethod, endpoint: string, data: any, callback: (error: boolean, response: any) => void) {
   // If data is a string or number
   if (["string", "number"].includes(typeof data)) {
     endpoint += "/" + data;
@@ -56,7 +56,7 @@ function makeRequest(method: HttpMethod, endpoint: string, data: any, callback: 
       saveAuthToken(token);
     }
 
-    callback(response.data);
+    callback(false, response.data);
   })
   .catch((error: AxiosError) => {
     // If has custom message
@@ -73,7 +73,7 @@ function makeRequest(method: HttpMethod, endpoint: string, data: any, callback: 
     showToast(TYPE.ERROR, error.message);
 
     // Execute callback
-    callback(error);
+    callback(true, error);
   });
 }
 

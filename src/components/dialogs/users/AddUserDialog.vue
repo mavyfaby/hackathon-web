@@ -11,10 +11,10 @@
         </div>
         
         <div class="grid grid-cols-2 gap-5">
-          <md-filled-text-field ref="teamAnchor" label="Team Name" v-model="teamName" @click="searchOpen('team')" readOnly>
+          <md-filled-text-field ref="teamAnchor" label="Team" v-model="team.name" @click="searchOpen('team')" readOnly>
             <md-icon slot="leadingicon">groups</md-icon>
           </md-filled-text-field>
-          <md-filled-text-field ref="deptAnchor" label="Department" v-model="deptName" @click="searchOpen('dept')" readOnly>
+          <md-filled-text-field ref="deptAnchor" label="Department" v-model="department.name" @click="searchOpen('dept')" readOnly>
             <md-icon slot="leadingicon">account_tree</md-icon>
           </md-filled-text-field>
         </div>
@@ -67,19 +67,22 @@
   
           <div class="grid gap-5" v-else>
             <!-- Address -->
-            <div class="flex">
+            <div class="grid grid-cols-2 gap-5">
               <md-filled-text-field label="Address" class="w-full" v-model="address">
                 <md-icon slot="leadingicon">location_on</md-icon>
+              </md-filled-text-field>
+              <md-filled-text-field label="Status" v-model="status">
+                <md-icon slot="leadingicon">check_circle</md-icon>
               </md-filled-text-field>
             </div>
 
             <!-- Designation and Status -->
             <div class="grid grid-cols-2 gap-5">
-              <md-filled-text-field label="Designation" v-model="designation" @click="searchOpen('designation')">
+              <md-filled-text-field label="Team Designation" v-model="team.name" @click="searchOpen('team')" readOnly>
                 <md-icon slot="leadingicon">work</md-icon>
               </md-filled-text-field>
-              <md-filled-text-field label="Status" v-model="status">
-                <md-icon slot="leadingicon">check_circle</md-icon>
+              <md-filled-text-field ref="deptAnchor" label="Department" v-model="department.name" @click="searchOpen('dept')" readOnly>
+                <md-icon slot="leadingicon">account_tree</md-icon>
               </md-filled-text-field>
             </div>
 
@@ -144,11 +147,15 @@
 </template>
 
 <script lang="ts" setup>
+import { Console } from "console";
 import { ref } from "vue";
+import { TYPE } from "vue-toastification";
+import { Endpoints } from "~/network/endpoints";
+import makeRequest from "~/network/request";
 import { useStore } from "~/store";
 
 import { Users } from "~/types";
-import { departments, teams } from "~/values";
+import showToast from "~/utils/toast";
 
 const store = useStore();
 const type = ref(Users.ADMIN);
@@ -156,8 +163,8 @@ const step = ref(1);
 
 // Tech name
 const leadName = ref("");
-const teamName = ref("");
-const deptName = ref("");
+const team = ref({ id: -1, name: "" });
+const department= ref({ id: -1, name: "" });
 
 // Employee
 const firstName = ref("");
@@ -168,31 +175,44 @@ const birthdate = ref("");
 const gender = ref("");
 const address = ref("");
 const phone = ref("");
-const designation = ref("");
-const status = ref("");
+const status = ref("active");
 
 // GLobal
 const username = ref("");
 const password = ref("");
 
 function searchOpen(type: string) {
-  store.dialog.search.open({
-    data: ['designation', 'team'].includes(type) ? teams : departments,
-    title: "Select a " + (type === 'team' ? 'team' : 'department'),
-    nameKey: 'name',
-    valueKey: 'id',
-    callback: (value: string) => {
-      if (type === 'team') {
-        return teamName.value = value;
-      }
-
-      if (type === 'designation') {
-        return designation.value = value;
-      }
-
-      return deptName.value = value;
+  makeRequest("GET", type === "team" ? Endpoints.Teams : Endpoints.Departments, null, (err, response) => {
+    if (err) {
+      showToast(TYPE.ERROR, "Failed to fetch " + (type === 'team' ? 'teams' : 'departments'));
+      return;
     }
-  })
+
+    if ((type === "team" && !response.team) || (type === "dept" && !response.depts)) {
+      return;
+    }
+
+    const data = response[type === 'team' ? 'team' : 'depts'].map((e: any) => {
+      return {
+        id: type === 'team' ? e.team_id : e.department_id,
+        name: type === 'team' ? e.team_name : e.department_name,
+      };
+    });
+
+    store.dialog.search.open({
+      data: data,
+      title: "Select a " + (type === 'team' ? 'team' : 'department'),
+      nameKey: 'name',
+      valueKey: 'id',
+      callback: (value: { id: number, name: string }) => {
+        if (type === 'team') {
+          return team.value = value;;
+        }
+
+        return department.value = value;
+      }
+    })
+  });
 }
 
 function onSelectType(t: Users) {
@@ -206,12 +226,36 @@ function onClose() {
 function addUser() {
   switch (type.value) {
     case Users.ADMIN:
+
+      const dataAdmin: any = {
+        username: username.value,
+        password: password.value,
+      };
+
+      // If any of the data is empty
+      for (const key in dataAdmin) {
+        if (dataAdmin[key] === "") {
+          showToast(TYPE.ERROR, "Please fill up all fields");
+          return;
+        }
+      }
+
+      makeRequest("POST", Endpoints.Admin, dataAdmin, (err, response) => {
+        if (err) {
+          showToast(TYPE.ERROR, "Error adding admin");
+          return;
+        }
+
+        showToast(TYPE.SUCCESS, "Successfully added admin");
+        onClose();
+      });
+
       break;
     case Users.TECH_LEAD:
       break;
     case Users.EMPLOYEE:
 
-      const data = {
+      const data: any = {
         last_name: lastName.value,
         first_name: firstName.value,
         middle_name: middleName.value,
@@ -221,8 +265,44 @@ function addUser() {
         address: address.value,
         mobile_number: phone.value,
         password: password.value,
-        status: status.value
+        status: status.value,
+        team_id: team.value.id,
+        dept_id: department.value.id,
       };
+
+      // If any of the data is empty
+      for (const key in data) {
+        if (data[key] === "" || data[key] === -1) {
+          showToast(TYPE.ERROR, "Please fill up all fields");
+          return;
+        }
+      }
+
+      makeRequest("POST", Endpoints.Employee, data, (err, response) => {
+        if (err) {
+          showToast(TYPE.ERROR, "Error adding employee");
+          return;
+        }
+
+        // Clear all fields
+        firstName.value = "";
+        lastName.value = "";
+        middleName.value = "";  
+        email.value = "";
+        birthdate.value = "";
+        gender.value = "";
+        address.value = "";
+        phone.value = "";
+        status.value = "active";
+        team.value = { id: -1, name: "" };
+        department.value = { id: -1, name: "" };
+
+        // Show message
+        showToast(TYPE.SUCCESS, "Successfully added employee");
+
+        // Close dialog
+        onClose();
+      });
 
       break;
   }

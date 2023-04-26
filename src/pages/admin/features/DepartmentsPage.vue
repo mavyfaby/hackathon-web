@@ -66,7 +66,6 @@ import EditDepartmentDialog from "~/components/dialogs/departments/EditDepartmen
 import makeRequest, { Endpoints } from "~/network/request";
 import { TYPE } from "vue-toastification";
 import showToast from "~/utils/toast";
-import { teams } from "~/values";
 
 const store = useStore();
 const departments = ref<Department[]>([]);
@@ -79,8 +78,8 @@ onMounted(() => {
 function getDepartments() {
   isLoading.value = true;
   
-  makeRequest("GET", Endpoints.Departments, null, (response) => {
-    if (!response.depts) {
+  makeRequest("GET", Endpoints.Departments, null, (err, response) => {
+    if (err || !response.depts) {
       return;
     }
   
@@ -112,8 +111,8 @@ function onDelete(dept: Department) {
       {
         name: "Delete",
         action: () => {
-          makeRequest("DELETE", Endpoints.Department, dept.id, (response) => {
-            if (!response.success) {
+          makeRequest("DELETE", Endpoints.Department, dept.id, (err, response) => {
+            if (err || !response.success) {
               showToast(TYPE.ERROR, "Failed to delete department");
               return;
             }

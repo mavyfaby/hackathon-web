@@ -78,8 +78,8 @@ onMounted(() => {
 function getTeams() {
   isLoading.value = true;
 
-  makeRequest("GET", Endpoints.Teams, null, (response) => {
-    if (!response.team) {
+  makeRequest("GET", Endpoints.Teams, null, (err, response) => {
+    if (err || !response.team) {
       return;
     }
 
@@ -112,8 +112,8 @@ function onDelete(team: Team) {
         name: "Delete",
         action: () => {
 
-          makeRequest("DELETE", Endpoints.Team, team.id, (response) => {
-            if (!response.success) {
+          makeRequest("DELETE", Endpoints.Team, team.id, (err, response) => {
+            if (err || !response.success) {
               showToast(TYPE.ERROR, "Failed to delete team");
               return;
             }

@@ -16,7 +16,7 @@
           <md-list-item
             v-for="(item, i) in data"
             :key="i"
-            :headline="item"
+            :headline="store.dialog.search.nameKey ? item[store.dialog.search.nameKey] : item"
             @click="onSelect(item)"
           />
         </md-list>

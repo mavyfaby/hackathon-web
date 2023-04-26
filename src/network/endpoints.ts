@@ -6,6 +6,7 @@
 export enum Endpoints {
     Team = "/api/team",
     Teams = "/api/teams",
+    Admin = "/api/admin",
     Login = "/api/login",
     Employee = "/api/employee",
     TeamLead = "/api/teamlead",

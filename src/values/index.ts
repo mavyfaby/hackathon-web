@@ -1,24 +1,5 @@
 export const THEME_COLOR = "#3b82f6";
 
-export const teams = [
-  "Compliance Support",
-  "Corporate",
-  "Customer Support",
-  "Data Analyst",
-  "Finance",
-  "Human Resource and Admin",
-  "Information Technology",
-  "Internal Sourcing",
-  "IT BizOps Team",
-  "IT Helpdesk Team",
-  "IT Operations, Helpdesk Team",
-  "IT SysOps Team"
-];
-
-export const departments = [
-  "basta", "kani", "departments"
-];
-
 export const users = [
   {
     name: "Admin",
