@@ -2,12 +2,12 @@
   <div class="container mx-auto px-4 h-full flex justify-center">
     <div class="w-full lg:w-3/4 xl:w-1/2">
 
-      <h4>Shift Schedules</h4>
+      <h4>Attendance Bonus Information</h4>
 
       <div class="bg-surface relative shadow-md sm:rounded-lg overflow-hidden">
         <div class="flex flex-col md:flex-row items-center justify-between py-4">
-          <md-filled-button @click="store.dialog.shiftSched.open = true">
-            <md-icon slot="icon">add</md-icon> Add Shift Schedule
+          <md-filled-button @click="store.dialog.bonus.open = true">
+            <md-icon slot="icon">add</md-icon> Add Attendance Bonus
           </md-filled-button>
           <md-filled-text-field label="Search">
             <md-icon slot="leadingicon">search</md-icon>
@@ -18,26 +18,24 @@
             <thead class="text-xs text-gray-700 uppercase bg-surface-variant text-on-surface-variant">
               <tr>
                 <th scope="col" class="px-4 py-3">#</th>
-                <th scope="col" class="px-4 py-3">From</th>
-                <th scope="col" class="px-4 py-3">To</th>
+                <th scope="col" class="px-4 py-3">Bonus Per Month</th>
                 <th scope="col" class="px-4 py-3">
                   <span class="sr-only">Actions</span>
                 </th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(shift, i) in shiftScheds" :key="i" class="border-b border-outline-variant">
+              <tr v-for="(bonus, i) in attendanceBonusInfo" :key="i" class="border-b border-outline-variant">
                 <th scope="row" class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   {{ i + 1 }}
                 </th>
-                <td class="px-4 py-2">{{ shift.from }}</td>
-                <td class="px-4 py-2">{{ shift.to }}</td>
+                <td class="px-4 py-2">{{ toCurrency(Number(bonus)) }}</td>
                 <td class="px-4 py-2 flex items-center justify-end">
                   <div class="flex justify-center space-x-2 actions">
-                    <button @click="onEdit(shift)">
+                    <button @click="onEdit(bonus)">
                       <md-icon>edit</md-icon>
                     </button>
-                    <button @click="onDelete(shift)">
+                    <button @click="onDelete(bonus)">
                       <md-icon>delete</md-icon>
                     </button>
                   </div>
@@ -49,28 +47,29 @@
       </div>
     </div>
 
-    <AddShiftDialog />
-    <EditShiftDialog />
+    <AddBonusDialog />
+    <EditBonusDialog />
   </div>
 </template>
   
 <script lang="ts" setup>
-import { shiftScheds } from "~/values";
+import { attendanceBonusInfo } from "~/values";
 import { useStore } from "~/store";
+import { toCurrency } from "~/utils/string";
 
-import AddShiftDialog from "~/components/dialogs/shiftsched/AddShiftDialog.vue";
-import EditShiftDialog from "~/components/dialogs/shiftsched/EditShiftDialog.vue";
+import AddBonusDialog from "~/components/dialogs/bonus/AddBonusDialog.vue";
+import EditBonusDialog from "~/components/dialogs/bonus/EditBonusDialog.vue";
 
 const store = useStore();
 
 function onEdit(name: any) {
-  store.dialog.editShiftSched.open = true;
+  store.dialog.editBonus.open = true;
 }
 
 function onDelete(name: any) {
   store.dialog.main.open({
-    title: "Delete shift schedule",
-    content: `Are you sure you want to delete "${name}" schedule?`,
+    title: "Delete bonus",
+    content: `Are you sure you want to delete bonus "${name}"?`,
     actions: [
       {
         name: "Cancel",
@@ -81,8 +80,8 @@ function onDelete(name: any) {
         action: () => {
           store.dialog.main.close();
           store.dialog.main.open({
-            title: "Deleted team",
-            content: `Schdule ${name} has been deleted.`,
+            title: "Deleted bonus",
+            content: `The bonus "${name}" has been deleted.`,
             actions: [
               {
                 name: "Close",

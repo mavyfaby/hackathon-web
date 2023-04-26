@@ -44,17 +44,27 @@ export const shiftScheds = [
   { from: '6:00PM', to: '3:00AM' },
 ];
 
+export const hazardPayInfo = [
+  { area: 'Area 1', rate: '50' },
+  { area: 'Area 2', rate: '100' },
+  { area: 'Area 3', rate: '150' },
+  { area: 'Area 4', rate: '200' },
+];
+
+export const attendanceBonusInfo = [
+  "1000"
+];
+
 export const admin = {
   features: [
-    { name: "Users", path: "Users" },
-    { name: "Department", path: "Departments" },
-    { name: "Team", path: "Teams" },
-    { name: "Shift Schedule", path: "Shift Schedule" },
-    { name: "Employees", path: "/admin/employees" },
-    { name: "Hybrid Schedule", path: "/admin/hybrid-schedule" },
-    { name: "Hazard Pay Information", path: "/admin/hazard-pay" },
-    { name: "Attendance Bonus Information", path: "/admin/attendance-bonus" },
-    { name: "Paid Time Off (PTO) Information", path: "/admin/pto" },
+    "Users",
+    "Departments",
+    "Teams",
+    "Shift Schedule",
+    "Hybrid Schedule",
+    "Hazard Pay Information",
+    "Attendance Bonus Information",
+    "Paid Time Off (PTO) Information"
   ]
 };
 

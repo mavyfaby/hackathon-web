@@ -27,6 +27,11 @@ const routes = [
     name: "Techlead",
     component: () => import("../pages/techlead/TechleadPage.vue")
   },
+  {
+    path: '/employee',
+    name: 'Employee',
+    component: () => import("../pages/employee/EmployeePage.vue")
+  },
 
   {
     path: '/admin/features/users',
@@ -47,6 +52,16 @@ const routes = [
     path: '/admin/features/shift-schedule',
     name: "Shift Schedule",
     component: () => import("../pages/admin/features/ShiftSchedule.vue")
+  },
+  {
+    path: '/admin/features/hazard-pay',
+    name: "Hazard Pay Information",
+    component: () => import("../pages/admin/features/HazardPayInfo.vue")
+  },
+  {
+    path: '/admin/features/attendance-bonus',
+    name: "Attendance Bonus Information",
+    component: () => import("../pages/admin/features/AttendanceBonus.vue")
   }
 ];
 

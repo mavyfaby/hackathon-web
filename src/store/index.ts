@@ -30,6 +30,24 @@ const useStore = defineStore("global", () => {
     editDepartment: {
       open: false
     },
+    shiftSched: {
+      open: false
+    },
+    editShiftSched: {
+      open: false
+    },
+    hazardPay: {
+      open: false
+    },
+    editHazardPay: {
+      open: false
+    },
+    bonus: {
+      open: false
+    },
+    editBonus: {
+      open: false
+    },
     search: {
       isOpen: false,
       title: "",

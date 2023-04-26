@@ -1,9 +1,9 @@
 <template>
-  <div class="container mx-auto px-4 h-full flex items-center">
-    <div class="flex gap-10 flex-col justify-center items-center w-full h-full">
+  <div class="container mx-auto px-4 h-full flex">
+    <div class="flex gap-10 flex-col items-center w-full h-full">
       <h4>Admin Feature List</h4>
       <md-list class="w-3/4">
-        <md-list-item v-for="(feature, i) in admin.features" :key="i" :headline="feature.name" @click="view(feature.path)"
+        <md-list-item v-for="(feature, i) in admin.features" :key="i" :headline="feature" @click="view(feature)"
           trailingSupportingText="Select" />
       </md-list>
     </div>
