@@ -26,12 +26,12 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(shift, i) in shiftScheds" :key="i" class="border-b border-outline-variant">
+              <tr v-for="(shift, i) in schedules" :key="i" class="border-b border-outline-variant">
                 <th scope="row" class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   {{ i + 1 }}
                 </th>
-                <td class="px-4 py-2">{{ shift.from }}</td>
-                <td class="px-4 py-2">{{ shift.to }}</td>
+                <td class="px-4 py-2">{{ to12HourTime(shift.fromTime) }}</td>
+                <td class="px-4 py-2">{{ to12HourTime(shift.toTime) }}</td>
                 <td class="px-4 py-2 flex items-center justify-end">
                   <div class="flex justify-center space-x-2 actions">
                     <button @click="onEdit(shift)">
@@ -49,28 +49,61 @@
       </div>
     </div>
 
-    <AddShiftDialog />
-    <EditShiftDialog />
+    <AddShiftDialog @add="getSchedules" />
+    <EditShiftDialog @edit="getSchedules" />
   </div>
 </template>
   
 <script lang="ts" setup>
-import { shiftScheds } from "~/values";
+import type { ShiftSchedule } from "~/types";
+import { ref, onMounted } from "vue";
 import { useStore } from "~/store";
 
 import AddShiftDialog from "~/components/dialogs/shiftsched/AddShiftDialog.vue";
 import EditShiftDialog from "~/components/dialogs/shiftsched/EditShiftDialog.vue";
 
-const store = useStore();
+import makeRequest, { Endpoints } from "~/network/request";
+import { TYPE } from "vue-toastification";
+import { to12HourTime } from "~/utils/string";
+import showToast from "~/utils/toast";
 
-function onEdit(name: any) {
-  store.dialog.editShiftSched.open = true;
+const store = useStore();
+const isLoading = ref(true);
+const schedules = ref<ShiftSchedule[]>([]);
+
+onMounted(() => {
+  getSchedules();
+});
+
+function getSchedules() {
+  isLoading.value = true;
+
+  makeRequest("GET", Endpoints.ShiftScheds, null, (err, response) => {
+    if (err || !response.shifts) {
+      return;
+    }
+
+    schedules.value = response.shifts.map((e: any) => {
+      return {
+        id: e.id,
+        fromTime: e.from_time,
+        toTime: e.to_time,
+      };
+    });
+
+    isLoading.value = false;
+  });
 }
 
-function onDelete(name: any) {
+function onEdit(shift: ShiftSchedule) {
+  store.dialog.editShiftSched.open = true;
+  store.dialog.editShiftSched.sched = shift;
+}
+
+function onDelete(shift: ShiftSchedule) {
   store.dialog.main.open({
     title: "Delete shift schedule",
-    content: `Are you sure you want to delete "${name}" schedule?`,
+    content: `Are you sure you want to delete this schedule?`,
     actions: [
       {
         name: "Cancel",
@@ -79,16 +112,16 @@ function onDelete(name: any) {
       {
         name: "Delete",
         action: () => {
-          store.dialog.main.close();
-          store.dialog.main.open({
-            title: "Deleted team",
-            content: `Schdule ${name} has been deleted.`,
-            actions: [
-              {
-                name: "Close",
-                action: () => store.dialog.main.close(),
-              },
-            ],
+
+          makeRequest("DELETE", Endpoints.ShiftSched, shift.id, (err, response) => {
+            if (err || !response.success) {
+              showToast(TYPE.ERROR, "Failed to delete shift schedule!");
+              return;
+            }
+
+            schedules.value = schedules.value.filter((e) => e.id !== shift.id);
+            store.dialog.main.close();
+            showToast(TYPE.SUCCESS, "Shift schedule deleted");
           });
         },
       },

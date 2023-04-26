@@ -3,10 +3,10 @@
     <div slot="header">New shift schedule</div>
 
     <div class="grid gap-y-5 w-full">
-      <md-filled-text-field label="From" type="time" v-model="timeFrom" class="w-full">
+      <md-filled-text-field label="From" type="time" v-model="fromTime" class="w-full">
         <md-icon slot="leadingicon">access_time</md-icon>
       </md-filled-text-field>
-      <md-filled-text-field label="To" type="time" v-model="timeTo" class="w-full">
+      <md-filled-text-field label="To" type="time" v-model="toTime" class="w-full">
         <md-icon slot="leadingicon">access_time</md-icon>
       </md-filled-text-field>
     </div>
@@ -24,17 +24,37 @@
   
 <script lang="ts" setup>
 import { ref } from "vue";
+import { TYPE } from "vue-toastification";
+import { Endpoints } from "~/network/endpoints";
+import makeRequest from "~/network/request";
 import { useStore } from "~/store";
+import showToast from "~/utils/toast";
 
 const store = useStore();
-const timeFrom = ref("");
-const timeTo = ref("");
+const fromTime = ref("");
+const toTime = ref("");
+
+const emit = defineEmits(["add"]);
 
 function onClose() {
   store.dialog.shiftSched.open = false;
 }
 
 function select() {
-  store.dialog.shiftSched.open = false;
-} 
+  if (fromTime.value == "" || toTime.value == "") {
+    showToast(TYPE.ERROR, "Please fill up all fields");
+    return;
+  }
+
+  makeRequest("POST", Endpoints.ShiftSched, { fromTime: fromTime.value, toTime: toTime.value }, (err, response) => {
+    if (err || !response.success) {
+      showToast(TYPE.ERROR, "Failed to add shift schedule");
+      return;
+    }
+
+    showToast(TYPE.SUCCESS, "Shift schedule added");
+    emit("add");
+    onClose();
+  });
+}
 </script>

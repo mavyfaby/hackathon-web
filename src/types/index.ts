@@ -15,3 +15,9 @@ export type Department = {
   id: number;
   name: string;
 };
+
+export type ShiftSchedule = {
+  id: number;
+  fromTime: string;
+  toTime: string;
+}

@@ -1,4 +1,4 @@
-import type { Department, Team } from "~/types";
+import type { Department, ShiftSchedule, Team } from "~/types";
 import { defineStore } from "pinia";
 
 type DialogParam = { title: string, content: string, actions: Action[] };
@@ -44,6 +44,11 @@ const useStore = defineStore("global", () => {
       open: false
     },
     editShiftSched: {
+      sched: {
+        id: -1,
+        fromTime: "",
+        toTime: "",
+      } as ShiftSchedule,
       open: false
     },
     hazardPay: {

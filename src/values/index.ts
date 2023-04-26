@@ -18,13 +18,6 @@ export const users = [
   }
 ];
 
-export const shiftScheds = [
-  { from: '9:00AM', to: '6:00PM' },
-  { from: '9:00PM', to: '6:00AM' },
-  { from: '3:00PM', to: '12:00AM' },
-  { from: '6:00PM', to: '3:00AM' },
-];
-
 export const hazardPayInfo = [
   { area: 'Area 1', rate: '50' },
   { area: 'Area 2', rate: '100' },
