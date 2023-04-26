@@ -3,8 +3,12 @@
     <div class="w-full lg:w-3/4 xl:w-1/2">
 
       <h4>Teams</h4>
+      
+      <div v-if="isLoading" class="flex justify-center">
+        <md-linear-progress indeterminate />
+      </div>
 
-      <div class="bg-surface relative shadow-md sm:rounded-lg overflow-hidden">
+      <div v-else class="bg-surface relative shadow-md sm:rounded-lg overflow-hidden">
         <div class="flex flex-col md:flex-row items-center justify-between py-4">
           <md-filled-button @click="store.dialog.team.open = true">
             <md-icon slot="icon">add</md-icon> Add Team
@@ -13,7 +17,7 @@
             <md-icon slot="leadingicon">search</md-icon>
           </md-filled-text-field>
         </div>
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto pb-10">
           <table class="w-full text-sm text-left text-on-surface">
             <thead class="text-xs text-gray-700 uppercase bg-surface-variant text-on-surface-variant">
               <tr>
@@ -29,7 +33,7 @@
                 <th scope="row" class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   {{ i + 1 }}
                 </th>
-                <td class="px-4 py-2">{{ team }}</td>
+                <td class="px-4 py-2">{{ team.name }}</td>
                 <td class="px-4 py-2 flex items-center justify-end">
                   <div class="flex justify-center space-x-2 actions">
                     <button @click="onEdit(team)">
@@ -53,22 +57,53 @@
 </template>
 
 <script lang="ts" setup>
-import { teams } from "~/values";
+import type { Team } from "~/types";
+import { ref, onMounted } from "vue";
 import { useStore } from "~/store";
 
 import AddTeamDialog from "~/components/dialogs/teams/AddTeamDialog.vue";
 import EditTeamDialog from "~/components/dialogs/teams/EditTeamDialog.vue";
+import makeRequest, { Endpoints } from "~/network/request";
+import showToast from "~/utils/toast";
+import { TYPE } from "vue-toastification";
 
+const isLoading = ref(true);
+const teams = ref<Team[]>([]);
 const store = useStore();
 
-function onEdit(name: string) {
+onMounted(() => {
+  makeRequest("GET", Endpoints.Teams, null, (response) => {
+    teams.value = response.team.map((e: any) => {
+      return {
+        id: e.team_id,
+        name: e.team_name,
+      };
+    });
+
+    isLoading.value = false;
+  });
+});
+
+function onEdit(team: Team) {
+  store.dialog.editTeam.team = team;
   store.dialog.editTeam.open = true;
+  store.dialog.editTeam.callback = (name: string) => {
+    teams.value = teams.value.map((e) => {
+      if (e.id === team.id) {
+        team.name = name; 
+        return team;
+      }
+
+      return e;
+    });
+  };
+
 }
 
-function onDelete(name: string) {
+function onDelete(team: Team) {
   store.dialog.main.open({
     title: "Delete team",
-    content: `Are you sure you want to delete the team "${name}"?`,
+    content: `Are you sure you want to delete the team "${team.name}"?`,
     actions: [
       {
         name: "Cancel",
@@ -77,16 +112,16 @@ function onDelete(name: string) {
       {
         name: "Delete",
         action: () => {
-          store.dialog.main.close();
-          store.dialog.main.open({
-            title: "Deleted team",
-            content: `The team "${name}" has been deleted.`,
-            actions: [
-              {
-                name: "Close",
-                action: () => store.dialog.main.close(),
-              },
-            ],
+
+          makeRequest("DELETE", Endpoints.Team, team.id, (response) => {
+            if (!response.success) {
+              showToast(TYPE.ERROR, "Failed to delete team");
+              return;
+            }
+
+            teams.value = teams.value.filter((e) => e.id !== team.id);
+            store.dialog.main.close();
+            showToast(TYPE.SUCCESS, "Team deleted");
           });
         },
       },

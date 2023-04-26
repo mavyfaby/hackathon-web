@@ -20,9 +20,9 @@ const instance = axios.create({
  * Make a request to the Fireduino API
  */
 function makeRequest(method: HttpMethod, endpoint: string, data: any, callback: (response: any) => void) {
-  // If method is post
-  if (method === "POST") {
-    endpoint += + "/" + data;
+  // If data is a string or number
+  if (["string", "number"].includes(typeof data)) {
+    endpoint += "/" + data;
   }
 
   // Create config 

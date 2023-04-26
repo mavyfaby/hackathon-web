@@ -5,3 +5,8 @@ export enum Users {
   TECH_LEAD,
   EMPLOYEE
 }
+
+export type Team = {
+  id: number;
+  name: string;
+};
