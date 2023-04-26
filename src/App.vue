@@ -11,6 +11,7 @@
     </div>
 
     <MainDialog />
+    <SearchDialog />
   </div>
 </template>
 
@@ -19,6 +20,7 @@ import { setDefaultTheme } from './utils/theme';
 
 import AppBar from './components/appbar/AppBar.vue';
 import MainDialog from './components/dialogs/MainDialog.vue';
+import SearchDialog from './components/dialogs/SearchDialog.vue';
 
 setDefaultTheme();
 </script>

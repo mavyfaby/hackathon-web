@@ -4,7 +4,7 @@
       <a href="/">
         <img :src="store.dark ? DarkLogo : LightLogo" />
       </a>
-      <h4>Title</h4>
+      <h4>{{ store.appbarTitle }}</h4>
     </div>
   </div>
 </template>

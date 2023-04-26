@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 
-type DialogParam = { title : string, content: string, actions: Action[] };
+type DialogParam = { title: string, content: string, actions: Action[] };
+type SearchParam = { title: string, nameKey: string, valueKey: string, data: any[], callback: (item: any) => void };
 type Action = { name: string, action: Function };
 
 /**
@@ -8,6 +9,7 @@ type Action = { name: string, action: Function };
  */
 const useStore = defineStore("global", () => {
   const dark: boolean = false;
+  const appbarTitle: string = "Employee Tracker";
 
   const dialog = {
     user: {
@@ -28,6 +30,22 @@ const useStore = defineStore("global", () => {
     editDepartment: {
       open: false
     },
+    search: {
+      isOpen: false,
+      title: "",
+      nameKey: "",
+      valueKey: "",
+      callback: (item: any) => {},
+      data: <any>[],
+      open(data: SearchParam) {
+        this.nameKey = data.nameKey;
+        this.valueKey = data.valueKey;
+        this.title = data.title;
+        this.data = data.data;
+        this.callback = data.callback;
+        this.isOpen = true;
+      },
+    },
     main: {
       isOpen: false,
       title: "",
@@ -46,7 +64,7 @@ const useStore = defineStore("global", () => {
   };
 
   return {
-    dark, dialog
+    dark, dialog, appbarTitle
   };
 });
 

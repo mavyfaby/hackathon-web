@@ -37,12 +37,19 @@ export const users = [
   }
 ];
 
+export const shiftScheds = [
+  { from: '9:00AM', to: '6:00PM' },
+  { from: '9:00PM', to: '6:00AM' },
+  { from: '3:00PM', to: '12:00AM' },
+  { from: '6:00PM', to: '3:00AM' },
+];
+
 export const admin = {
   features: [
     { name: "Users", path: "Users" },
     { name: "Department", path: "Departments" },
     { name: "Team", path: "Teams" },
-    { name: "Shift Schedule", path: "/admin/shift-schedule" },
+    { name: "Shift Schedule", path: "Shift Schedule" },
     { name: "Employees", path: "/admin/employees" },
     { name: "Hybrid Schedule", path: "/admin/hybrid-schedule" },
     { name: "Hazard Pay Information", path: "/admin/hazard-pay" },

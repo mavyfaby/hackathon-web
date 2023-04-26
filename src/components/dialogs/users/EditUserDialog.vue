@@ -3,9 +3,22 @@
     <div slot="header">New user</div>
 
     <div class="flex flex-col" :class="{ 'gap-5': type !== Users.EMPLOYEE }">
-      <md-filled-text-field v-if="type == Users.TECH_LEAD" label="Name" v-model="name">
-        <md-icon slot="leadingicon">person</md-icon>
-      </md-filled-text-field>
+      <div class="grid gap-5 w-full" v-if="type == Users.TECH_LEAD">
+        <div class="w-full">
+          <md-filled-text-field label="Lead Name" v-model="leadName" class="w-full">
+            <md-icon slot="leadingicon">person</md-icon>
+          </md-filled-text-field>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-5">
+          <md-filled-text-field ref="teamAnchor" label="Team Name" v-model="teamName" @click="searchOpen('team')" readOnly>
+            <md-icon slot="leadingicon">groups</md-icon>
+          </md-filled-text-field>
+          <md-filled-text-field ref="deptAnchor" label="Department" v-model="deptName" @click="searchOpen('dept')" readOnly>
+            <md-icon slot="leadingicon">account_tree</md-icon>
+          </md-filled-text-field>
+        </div>
+      </div>
 
       <div v-if="type == Users.EMPLOYEE">
         <Transition name="fade" mode="out-in">
@@ -62,7 +75,7 @@
 
             <!-- Designation and Status -->
             <div class="grid grid-cols-2 gap-5">
-              <md-filled-text-field label="Designation" v-model="designation">
+              <md-filled-text-field label="Designation" v-model="designation" @click="searchOpen('designation')">
                 <md-icon slot="leadingicon">work</md-icon>
               </md-filled-text-field>
               <md-filled-text-field label="Status" v-model="status">
@@ -89,8 +102,6 @@
           </div>
         </Transition>
       </div>
-
-
 
       <div v-if="type != Users.EMPLOYEE" class="grid grid-cols-2 gap-5">
         <md-filled-text-field label="Username" v-model="username">
@@ -137,14 +148,18 @@ import { ref } from "vue";
 import { useStore } from "~/store";
 
 import { Users } from "~/types";
+import { departments, teams } from "~/values";
 
 const store = useStore();
-const name = ref("");
 const type = ref(Users.ADMIN);
-const username = ref("");
-const password = ref("");
 const step = ref(1);
 
+// Tech name
+const leadName = ref("");
+const teamName = ref("");
+const deptName = ref("");
+
+// Employee
 const firstName = ref("");
 const lastName = ref("");
 const middleName = ref("");
@@ -156,6 +171,29 @@ const phone = ref("");
 const designation = ref("");
 const status = ref("");
 
+// GLobal
+const username = ref("");
+const password = ref("");
+
+function searchOpen(type: string) {
+  store.dialog.search.open({
+    data: ['designation', 'team'].includes(type) ? teams : departments,
+    title: "Select a " + (type === 'team' ? 'team' : 'department'),
+    nameKey: 'name',
+    valueKey: 'id',
+    callback: (value: string) => {
+      if (type === 'team') {
+        return teamName.value = value;
+      }
+
+      if (type === 'designation') {
+        return designation.value = value;
+      }
+
+      return deptName.value = value;
+    }
+  })
+}
 
 function onSelectType(t: Users) {
   type.value = t;
@@ -171,6 +209,10 @@ function select() {
 </script>
 
 <style lang="scss" scoped>
+md-menu {
+  --_container-color: var(--md-sys-color-inverse-on-surface);
+}
+  
 .type-select {
   @apply cursor-pointer;
 }

@@ -20,3 +20,5 @@ import "@material/web/list/list"
 import "@material/web/list/list-item"
 
 import "@material/web/radio/radio"
+import "@material/web/menu/menu"
+import "@material/web/menu/menu-item"

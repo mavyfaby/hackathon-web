@@ -42,6 +42,11 @@ const routes = [
     path: '/admin/features/teams',
     name: "Teams",
     component: () => import("../pages/admin/features/TeamsPage.vue")
+  },
+  {
+    path: '/admin/features/shift-schedule',
+    name: "Shift Schedule",
+    component: () => import("../pages/admin/features/ShiftSchedule.vue")
   }
 ];
 
