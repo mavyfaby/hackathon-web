@@ -15,11 +15,33 @@ export const teams = [
   "IT SysOps Team"
 ];
 
+export const departments = [
+  "basta", "kani", "departments"
+];
+
+export const users = [
+  {
+    name: "Admin",
+    username: "admin",
+    type: "admin",
+  },
+  {
+    name: "Tech Lead",
+    username: "techlead",
+    type: "techlead",
+  },
+  {
+    name: "Employee",
+    username: "employee",
+    type: "employee",
+  }
+];
+
 export const admin = {
   features: [
-    { name: "Users", path: "/admin/users" },
-    { name: "Department", path: "/admin/departments" },
-    { name: "Team", path: "/admin/teams" },
+    { name: "Users", path: "Users" },
+    { name: "Department", path: "Departments" },
+    { name: "Team", path: "Teams" },
     { name: "Shift Schedule", path: "/admin/shift-schedule" },
     { name: "Employees", path: "/admin/employees" },
     { name: "Hybrid Schedule", path: "/admin/hybrid-schedule" },

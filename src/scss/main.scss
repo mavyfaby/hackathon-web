@@ -12,9 +12,30 @@
   // Temporary fix for components not being themed
   --md-dialog-container-color: var(--md-sys-color-inverse-on-surface);
   --md-sys-color-surface-container-highest: var(--md-sys-color-surface-variant);
+  --md-menu-item-list-item-container-color: var(--md-sys-color-inverse-on-surface);
   --md-navigation-bar-hover-state-layer-opacity: 0;
 
   scroll-behavior: smooth;
+}
+
+
+* {
+  ::-webkit-scrollbar {
+    width: 15px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    height: 6px;
+    border: 4px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+    -webkit-border-radius: 7px;
+    
+    @apply bg-outline-variant;
+  }
+
+  ::selection {
+    @apply bg-primary text-on-primary;
+  }
 }
 
 body {

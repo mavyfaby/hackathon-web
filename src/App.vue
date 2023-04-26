@@ -2,13 +2,15 @@
   <div class="h-full px-4">
     <AppBar />
 
-    <div class="pt-8 h-full">
+    <div class="pt-24 h-full">
       <router-view v-slot="{ Component }" class="grow">
         <Transition name="fade" mode="out-in">
           <component :is="Component" />
         </Transition>
       </router-view>
     </div>
+
+    <MainDialog />
   </div>
 </template>
 
@@ -16,6 +18,7 @@
 import { setDefaultTheme } from './utils/theme';
 
 import AppBar from './components/appbar/AppBar.vue';
+import MainDialog from './components/dialogs/MainDialog.vue';
 
 setDefaultTheme();
 </script>
