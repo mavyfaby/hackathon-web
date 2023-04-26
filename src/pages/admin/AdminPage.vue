@@ -35,21 +35,15 @@
           </thead>
           <tbody>
             <tr v-for="(d, i) in data" :key="i" class="border-b border-outline-variant">
-              <!-- <th scope="row" class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                {{ i + 1 }}
-              </th>
-              <td class="px-4 py-2">{{ user.name }}</td>
-              <td class="px-4 py-2">{{ user.type }}</td>
-              <td class="px-4 py-2 flex items-center justify-end">
-                <div class="flex justify-center space-x-2 actions">
-                  <button @click="onEdit(user)">
-                    <md-icon size="4">edit</md-icon>
-                  </button>
-                  <button @click="onDelete(user)">
-                    <md-icon>delete</md-icon>
-                  </button>
-                </div>
-              </td> -->
+              <td class="px-4 py-2">{{ d.department }}</td>
+              <td class="px-4 py-2">{{ d.employeeName }}</td>
+              <td class="px-4 py-2">{{ d.shift_schedule }}</td>
+              <td class="px-4 py-2">{{ d["group/team"] }}</td>
+              <td class="px-4 py-2">{{ d.work_type }}</td>
+              <td class="px-4 py-2">{{ d.PTO }}</td>
+              <td class="px-4 py-2">{{ d.holiday_off == 0 ? 'OFF' : 'ON' }}</td>
+              <td class="px-4 py-2">{{ d.remarks }}</td>
+              <td class="px-4 py-2">{{ d.location }}</td>
             </tr>                    
           </tbody>
         </table>
@@ -68,35 +62,15 @@ const isLoading = ref(true);
 const data = ref(<any>[]);
 
 onMounted(() => {
-
-  makeRequest("GET", Endpoints.Departments, null, (res) => {
-    for (const dept of res.department) {
-      const d = {};
-      const department = dept.department_details;
-      const teams = dept.teams;
-
-      if (teams.length > 0) {
-        
-        for (const team of teams) {
-          const employees = team.employees;
-          
-          for (const emp of employees) {
-            const name = `${emp.first_name} ${emp.middle_name} ${emp.last_name}}`;
-            const shift = emp.shift_schedule;
-            const group = team.team_name;
-            const workType = emp.work_type;
-            const onPTO = emp.PTO;
-            const holidayOff = emp.holiday_off;
-            const remarks = emp.remarks;
-          }
-        }
-      }
+  makeRequest("GET", Endpoints.AdminMasterPage, null, (res) => {
+    for (const d of res[0]) {
+      data.value.push(d);
     }
+
+    console.log(res);
 
     isLoading.value = false;
   });
-
-
 });
 
 function toFeatureList() {

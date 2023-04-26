@@ -19,7 +19,12 @@ const instance = axios.create({
 /**
  * Make a request to the Fireduino API
  */
-function makeRequest(method: HttpMethod, endpoint: Endpoints, data: object | null, callback: (response: any) => void) {
+function makeRequest(method: HttpMethod, endpoint: string, data: any, callback: (response: any) => void) {
+  // If method is post
+  if (method === "POST") {
+    endpoint += + "/" + data;
+  }
+
   // Create config 
   const config: AxiosRequestConfig = {
     method,
@@ -27,7 +32,7 @@ function makeRequest(method: HttpMethod, endpoint: Endpoints, data: object | nul
   };
 
   // If endpoint is not login
-  if (endpoint !== Endpoints.Login) {
+  if (endpoint !== "/api/login") {
     config.headers = {
       Authorization: `Bearer ${getAuthToken()}`,
     };
