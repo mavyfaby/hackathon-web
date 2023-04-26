@@ -11,7 +11,11 @@
 
       <h4>Master Page</h4>
 
-      <div class="overflow-x-auto">
+      <div class="flex justify-center" v-if="isLoading">
+        <md-linear-progress indeterminate></md-linear-progress>
+      </div>
+
+      <div v-else class="overflow-x-auto">
         <table class="w-full text-sm text-left text-on-surface">
           <thead class="text-xs text-gray-700 uppercase bg-surface-variant text-on-surface-variant">
             <tr>
@@ -30,8 +34,8 @@
             </tr>
           </thead>
           <tbody>
-            <!-- <tr v-for="(user, i) in users" :key="i" class="border-b border-outline-variant">
-              <th scope="row" class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <tr v-for="(d, i) in data" :key="i" class="border-b border-outline-variant">
+              <!-- <th scope="row" class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                 {{ i + 1 }}
               </th>
               <td class="px-4 py-2">{{ user.name }}</td>
@@ -45,8 +49,8 @@
                     <md-icon>delete</md-icon>
                   </button>
                 </div>
-              </td>
-            </tr>                     -->
+              </td> -->
+            </tr>                    
           </tbody>
         </table>
       </div>
@@ -55,12 +59,45 @@
 </template>
 
 <script setup lang="ts">
-import { admin } from "~/values"; 
+import makeRequest, { Endpoints } from "~/network/request";
+
+import { ref, onMounted } from "vue";
 import router from "~/router";
 
-function view(path: string) {
-  router.push({ path });  
-}
+const isLoading = ref(true);
+const data = ref(<any>[]);
+
+onMounted(() => {
+
+  makeRequest("GET", Endpoints.Departments, null, (res) => {
+    for (const dept of res.department) {
+      const d = {};
+      const department = dept.department_details;
+      const teams = dept.teams;
+
+      if (teams.length > 0) {
+        
+        for (const team of teams) {
+          const employees = team.employees;
+          
+          for (const emp of employees) {
+            const name = `${emp.first_name} ${emp.middle_name} ${emp.last_name}}`;
+            const shift = emp.shift_schedule;
+            const group = team.team_name;
+            const workType = emp.work_type;
+            const onPTO = emp.PTO;
+            const holidayOff = emp.holiday_off;
+            const remarks = emp.remarks;
+          }
+        }
+      }
+    }
+
+    isLoading.value = false;
+  });
+
+
+});
 
 function toFeatureList() {
   router.push({ name: "Admin Features" });

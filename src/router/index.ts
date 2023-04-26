@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { setPage } from "../utils/page";
+import { useStore } from "~/store";
 
 const routes = [
   {
@@ -76,7 +77,14 @@ const router = createRouter({
 });
 
 router.afterEach(to => {
-  setPage(to.name?.toString() || "Employee Tracker");
+  let title = to.name?.toString() || "Employee Tracker";
+  setPage(title);
+  
+  if (["Landing", "Login"].includes(to.name?.toString() || "")) {
+    title = "Employee Tracker";
+  }
+
+  useStore().appbarTitle = title;
 });
 
 export default router;

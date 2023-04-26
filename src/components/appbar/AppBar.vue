@@ -6,21 +6,30 @@
       </a>
       <h4>{{ store.appbarTitle }}</h4>
     </div>
+
+    <div>
+      <md-switch @click="changeTheme" :selected="isDarkMode()" />
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { useStore } from '~/store';
+import { setDefaultTheme, isDarkMode } from "~/utils/theme";
 
 import LightLogo from "~/assets/logo/logo.svg?url";
 import DarkLogo from "~/assets/logo/logo-dark.svg?url";
 
 const store = useStore();
+
+function changeTheme(ev: any) {
+  setDefaultTheme(ev.target.button.ariaChecked === "true");
+}
 </script>
 
 <style lang="scss" scoped>
 h4 {
-  @apply font-bold text-xl text-on-surface;
+  @apply font-bold text-lg text-on-surface-variant;
 }
 
 img {

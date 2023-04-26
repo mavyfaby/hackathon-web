@@ -3,13 +3,20 @@
     <div>
       <h4>Welcome back Tech lead!</h4>
 
-      <div class="grid grid-cols-2 gap-2 text-on-surface-variant w-1/2 my-10">
+      <div class="grid grid-cols-2 gap-2 text-on-surface-variant w-1/2 mt-8 mb-4 text-sm">
         <p>Department:</p>
         <p>{department}</p>
         <p>Team name:</p>
         <p>{team}</p>
         <p>Lead name:</p>
         <p>{lead}</p>
+      </div>
+
+      <div class="flex justify-end mb-4">
+        <md-tonal-button>
+          <md-icon slot="icon">save</md-icon>
+          Save changes
+        </md-tonal-button>
       </div>
 
       <div class="overflow-x-auto">

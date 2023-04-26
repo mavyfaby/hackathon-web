@@ -1,6 +1,6 @@
 <template>
   <md-dialog :open="store.dialog.user.open" @closed="onClose" scrimClickAction="">
-    <div slot="header">New user</div>
+    <div slot="header">New {{ type === Users.ADMIN ? 'Admin' : type === Users.TECH_LEAD ? 'Tech Lead' : 'Employee' }}</div>
 
     <div class="flex flex-col" :class="{ 'gap-5': type !== Users.EMPLOYEE }">
       <div class="grid gap-5 w-full" v-if="type == Users.TECH_LEAD">

@@ -10,6 +10,7 @@ type Action = { name: string, action: Function };
 const useStore = defineStore("global", () => {
   const dark: boolean = false;
   const appbarTitle: string = "Employee Tracker";
+  const isFromLogout: boolean = false;
 
   const dialog = {
     user: {
@@ -54,6 +55,9 @@ const useStore = defineStore("global", () => {
     editPto: {
       open: false
     },
+    session: {
+      open: false
+    },
     search: {
       isOpen: false,
       title: "",
@@ -88,7 +92,7 @@ const useStore = defineStore("global", () => {
   };
 
   return {
-    dark, dialog, appbarTitle
+    dark, dialog, appbarTitle, isFromLogout
   };
 });
 

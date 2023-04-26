@@ -3,7 +3,7 @@
     <div>
       <h4>Welcome back {name}!</h4>
 
-      <div class="grid grid-cols-2 gap-2 text-on-surface-variant my-10">
+      <div class="grid grid-cols-2 gap-2 text-on-surface-variant my-10 text-sm">
         <p>Department:</p>
         <p>{department}</p>
         <p>Team name:</p>

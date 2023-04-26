@@ -20,5 +20,16 @@ export default defineConfig({
   },
   server: {
     port: 3000
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        experimentalMinChunkSize: 200000,
+        entryFileNames: `assets/hackathon.[hash].js`,
+        chunkFileNames: `assets/hackathon.[hash].js`,
+        assetFileNames: `assets/hackathon.[hash].[ext]`,
+        compact: true,
+      },
+    }
   }
 })

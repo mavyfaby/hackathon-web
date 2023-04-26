@@ -30,7 +30,7 @@ img {
 }
 
 h3 {
-  @apply text-4xl font-bold text-primary text-center;
+  @apply text-4xl font-bold text-on-surface-variant dark:text-primary text-center;
 }
 
 h5 {

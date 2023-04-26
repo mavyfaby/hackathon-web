@@ -2,9 +2,14 @@
   <div class="container mx-auto px-4 h-full flex">
     <div class="flex gap-10 flex-col items-center w-full h-full">
       <h4>Admin Feature List</h4>
-      <md-list class="w-3/4">
-        <md-list-item v-for="(feature, i) in admin.features" :key="i" :headline="feature" @click="view(feature)"
-          trailingSupportingText="Select" />
+      <md-list class="w-3/4 border border-outline-variant rounded-xl">
+        <md-list-item
+          v-for="(feature, i) in admin.features"
+          :key="i"
+          :headline="feature"
+          @click="view(feature)"
+          trailingSupportingText="Select"
+        />
       </md-list>
     </div>
   </div>
