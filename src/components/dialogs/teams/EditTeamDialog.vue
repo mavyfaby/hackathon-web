@@ -29,6 +29,8 @@ import showToast from "~/utils/toast";
 const store = useStore();
 const name = ref("");
 
+const emit = defineEmits(["edit"]);
+
 watch(() => store.dialog.editTeam.open, (val) => {
   if (val) {
     name.value = store.dialog.editTeam.team.name;
@@ -51,8 +53,8 @@ function onEdit() {
       return;
     }
 
-    store.dialog.editTeam.callback(name.value);
     showToast(TYPE.SUCCESS, "Team edited");
+    emit("edit");
     onClose();
   });
 }

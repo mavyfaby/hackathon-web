@@ -29,6 +29,8 @@ import showToast from "~/utils/toast";
 const store = useStore();
 const name = ref("");
 
+const emit = defineEmits(["add"]);
+
 function onClose() {
   store.dialog.team.open = false;
 }
@@ -45,6 +47,7 @@ function select() {
     }
 
     showToast(TYPE.SUCCESS, "Team added");
+    emit("add");
     onClose();
   });
 }

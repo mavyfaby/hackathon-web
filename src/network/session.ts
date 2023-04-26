@@ -44,8 +44,8 @@ export async function validateToken() {
     // If token is not defined, return false
     if (token === null) return resolve(false);
   
-    makeRequest("POST", Endpoints.Validate, { token }, (err, data) => {
-      resolve(!err && data.success);
-    });
+    // makeRequest("POST", Endpoints.Validate, { token }, (err, data) => {
+    //   resolve(!err && data.success);
+    // });
   });
 }

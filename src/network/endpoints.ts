@@ -9,6 +9,7 @@ export enum Endpoints {
     Login = "/api/login",
     Employee = "/api/employee",
     TeamLead = "/api/teamlead",
+    Department = "/api/department",
     Departments = "/api/departments",
     AdminMasterPage = "/api/admin/masterpage",
 };

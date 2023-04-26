@@ -136,7 +136,7 @@
       <md-text-button @click="onClose">
         Cancel
       </md-text-button>
-      <md-text-button @click="select">
+      <md-text-button @click="addUser">
         Add User
       </md-text-button>
     </div>
@@ -203,8 +203,29 @@ function onClose() {
   store.dialog.user.open = false;
 }
 
-function select() {
+function addUser() {
+  switch (type.value) {
+    case Users.ADMIN:
+      break;
+    case Users.TECH_LEAD:
+      break;
+    case Users.EMPLOYEE:
 
+      const data = {
+        last_name: lastName.value,
+        first_name: firstName.value,
+        middle_name: middleName.value,
+        email: email.value,
+        birth_date: birthdate.value,
+        gender: gender.value,
+        address: address.value,
+        mobile_number: phone.value,
+        password: password.value,
+        status: status.value
+      };
+
+      break;
+  }
 }
 </script>
 

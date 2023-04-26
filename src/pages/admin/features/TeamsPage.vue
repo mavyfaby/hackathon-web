@@ -51,8 +51,8 @@
       </div>
     </div>
 
-    <AddTeamDialog />
-    <EditTeamDialog />
+    <AddTeamDialog @add="getTeams" />
+    <EditTeamDialog @edit="getTeams" />
   </div>
 </template>
 
@@ -72,7 +72,17 @@ const teams = ref<Team[]>([]);
 const store = useStore();
 
 onMounted(() => {
+  getTeams();
+});
+
+function getTeams() {
+  isLoading.value = true;
+
   makeRequest("GET", Endpoints.Teams, null, (response) => {
+    if (!response.team) {
+      return;
+    }
+
     teams.value = response.team.map((e: any) => {
       return {
         id: e.team_id,
@@ -82,22 +92,11 @@ onMounted(() => {
 
     isLoading.value = false;
   });
-});
+}
 
 function onEdit(team: Team) {
   store.dialog.editTeam.team = team;
   store.dialog.editTeam.open = true;
-  store.dialog.editTeam.callback = (name: string) => {
-    teams.value = teams.value.map((e) => {
-      if (e.id === team.id) {
-        team.name = name; 
-        return team;
-      }
-
-      return e;
-    });
-  };
-
 }
 
 function onDelete(team: Team) {

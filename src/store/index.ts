@@ -1,4 +1,4 @@
-import type { Team } from "~/types";
+import type { Department, Team } from "~/types";
 import { defineStore } from "pinia";
 
 type DialogParam = { title: string, content: string, actions: Action[] };
@@ -25,7 +25,6 @@ const useStore = defineStore("global", () => {
     },
     editTeam: {
       open: false,
-      callback: (name: string) => {},
       team: {
         id: -1,
         name: ""
@@ -35,7 +34,11 @@ const useStore = defineStore("global", () => {
       open: false
     },
     editDepartment: {
-      open: false
+      open: false,
+      dept: {
+        id: -1,
+        name: ""
+      } as Department
     },
     shiftSched: {
       open: false
