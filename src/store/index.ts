@@ -48,6 +48,12 @@ const useStore = defineStore("global", () => {
     editBonus: {
       open: false
     },
+    pto: {
+      open: false
+    },
+    editPto: {
+      open: false
+    },
     search: {
       isOpen: false,
       title: "",

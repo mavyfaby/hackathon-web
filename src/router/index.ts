@@ -62,6 +62,11 @@ const routes = [
     path: '/admin/features/attendance-bonus',
     name: "Attendance Bonus Information",
     component: () => import("../pages/admin/features/AttendanceBonus.vue")
+  },
+  {
+    path: '/admin/features/pto',
+    name: "Paid Time Off (PTO) Information",
+    component: () => import("../pages/admin/features/PaidTimeOff.vue")
   }
 ];
 

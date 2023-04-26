@@ -55,6 +55,10 @@ export const attendanceBonusInfo = [
   "1000"
 ];
 
+export const ptoInfo = [
+  "Unplanned Leave", "Planned Leave",
+];
+
 export const admin = {
   features: [
     "Users",
