@@ -18,7 +18,7 @@
             <thead class="text-xs text-gray-700 uppercase bg-surface-variant text-on-surface-variant">
               <tr>
                 <th scope="col" class="px-4 py-3">#</th>
-                <th scope="col" class="px-4 py-3">Name</th>
+                <th scope="col" class="px-4 py-3">Email</th>
                 <th scope="col" class="px-4 py-3">Type</th>
                 <th scope="col" class="px-4 py-3">
                   <span class="sr-only">Actions</span>
@@ -26,12 +26,12 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(user, i) in users" :key="i" class="border-b border-outline-variant">
+              <tr v-for="(user, i) in data" :key="i" class="border-b border-outline-variant">
                 <th scope="row" class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   {{ i + 1 }}
                 </th>
-                <td class="px-4 py-2">{{ user.name }}</td>
-                <td class="px-4 py-2">{{ user.type }}</td>
+                <td class="px-4 py-2">{{ user.email }}</td>
+                <td class="px-4 py-2">{{ getType(user.type) }}</td>
                 <td class="px-4 py-2 flex items-center justify-end">
                   <div class="flex justify-center space-x-2 actions">
                     <button @click="onEdit(user)">
@@ -55,13 +55,62 @@
 </template>
 
 <script lang="ts" setup>
-import { users } from "~/values";
 import { useStore } from "~/store";
 
 import AddUserDialog from "~/components/dialogs/users/AddUserDialog.vue";
 import EditUserDialog from "~/components/dialogs/users/EditUserDialog.vue";
+import { ref, onMounted } from "vue";
+import makeRequest, { Endpoints } from "~/network/request";
+import showToast from "~/utils/toast";
+import { TYPE } from "vue-toastification";
 
 const store = useStore();
+const data = ref(<any>[]);
+
+onMounted(() => {
+  makeRequest("GET", Endpoints.Users, null, (err, response) => {
+    if (err) {
+      showToast(TYPE.ERROR, "No users data");
+      return;
+    }
+
+    const d = [];
+
+    for (const admin of response.admins[0]) {
+      if (admin.email !== null) {
+        d.push({ email: admin.email, type: 1 })
+      }
+    }
+
+    for (const employee of response.employees[0]) {
+      if (employee.email !== null) {
+        d.push({ email: employee.email, type: 2 })
+      }
+    }
+
+    for (const teamleader of response.teamleaders[0]) {
+      if (teamleader.email !== null) {
+        d.push({ email: teamleader.email, type: 3 })
+      }
+    }
+
+    data.value = d;
+  });
+});
+
+function getType(type: any) {
+  if (type == 1) {
+    return "Admin";
+  }
+
+  if (type == 2) {
+    return "Employee";
+  }
+
+  if (type == 3) {
+    return "Team Leader";
+  }
+}
 
 function onEdit(name: any) {
   store.dialog.editUser.open = true;

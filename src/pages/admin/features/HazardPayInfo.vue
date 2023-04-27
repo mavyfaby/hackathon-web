@@ -26,12 +26,12 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(hazard, i) in hazardPayInfo" :key="i" class="border-b border-outline-variant">
+              <tr v-for="(hazard, i) in hazardPays" :key="i" class="border-b border-outline-variant">
                 <th scope="row" class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   {{ i + 1 }}
                 </th>
                 <td class="px-4 py-2">{{ hazard.area }}</td>
-                <td class="px-4 py-2">{{ toCurrency(Number(hazard.rate)) }}</td>
+                <td class="px-4 py-2">{{ toCurrency(Number(hazard.pay)) }}</td>
                 <td class="px-4 py-2 flex items-center justify-end">
                   <div class="flex justify-center space-x-2 actions">
                     <button @click="onEdit(hazard)">
@@ -49,29 +49,61 @@
       </div>
     </div>
 
-    <AddHazardPayDialog />
-    <EditHazardPayDialog />
+    <AddHazardPayDialog @add="getHazardPays" />
+    <EditHazardPayDialog @edit="getHazardPays" />
   </div>
 </template>
   
 <script lang="ts" setup>
-import { hazardPayInfo } from "~/values";
+import type { HazardPay } from "~/types";
 import { useStore } from "~/store";
 import { toCurrency } from "~/utils/string";
 
 import AddHazardPayDialog from "~/components/dialogs/hazardpay/AddHazardPayDialog.vue";
 import EditHazardPayDialog from "~/components/dialogs/hazardpay/EditHazardPayDialog.vue";
+import { ref, onMounted } from "vue";
+import { Endpoints } from "~/network/endpoints";
+import makeRequest from "~/network/request";
+import { TYPE } from "vue-toastification";
+import showToast from "~/utils/toast";
 
 const store = useStore();
+const isLoading = ref(false);
+const hazardPays = ref<HazardPay[]>([]);
 
-function onEdit(name: any) {
-  store.dialog.editHazardPay.open = true;
+onMounted(() => {
+  getHazardPays();
+});
+
+function getHazardPays() {
+  isLoading.value = true;
+
+  makeRequest("GET", Endpoints.HazardPays, null, (err, response) => {
+    if (err || !response.pays) {
+      return;
+    }
+
+    hazardPays.value = response.pays.map((e: any) => {
+      return {
+        id: e.id,
+        area: e.area_name,
+        pay: e.pay
+      };
+    });
+
+    isLoading.value = false;
+  });
 }
 
-function onDelete(name: any) {
+function onEdit(pay: HazardPay) {
+  store.dialog.editHazardPay.open = true;
+  store.dialog.editHazardPay.pay = pay;
+}
+
+function onDelete(pay: HazardPay) {
   store.dialog.main.open({
     title: "Delete hazard pay",
-    content: `Are you sure you want to delete area "${name}"?`,
+    content: `Are you sure you want to delete area "${pay.area}"?`,
     actions: [
       {
         name: "Cancel",
@@ -80,16 +112,16 @@ function onDelete(name: any) {
       {
         name: "Delete",
         action: () => {
-          store.dialog.main.close();
-          store.dialog.main.open({
-            title: "Deleted hazard pay",
-            content: `The area "${name}" has been deleted.`,
-            actions: [
-              {
-                name: "Close",
-                action: () => store.dialog.main.close(),
-              },
-            ],
+
+          makeRequest("DELETE", Endpoints.HazardPay, pay.id, (err, response) => {
+            if (err || !response.success) {
+              showToast(TYPE.ERROR, "Failed to delete hazard pay info!");
+              return;
+            }
+
+            hazardPays.value = hazardPays.value.filter((e) => e.id !== pay.id);
+            store.dialog.main.close();
+            showToast(TYPE.SUCCESS, "Hazard Pay deleted");
           });
         },
       },

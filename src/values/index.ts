@@ -18,13 +18,6 @@ export const users = [
   }
 ];
 
-export const hazardPayInfo = [
-  { area: 'Area 1', rate: '50' },
-  { area: 'Area 2', rate: '100' },
-  { area: 'Area 3', rate: '150' },
-  { area: 'Area 4', rate: '200' },
-];
-
 export const attendanceBonusInfo = [
   "1000"
 ];

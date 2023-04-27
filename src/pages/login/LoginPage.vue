@@ -90,6 +90,7 @@ function login() {
     const { type, id } = response;
 
     setStore("id", id);
+    store.isLoggedIn = true;
 
     switch (type) {
       case 1:

@@ -4,6 +4,7 @@
 
 import "@material/web/button/text-button";
 import "@material/web/button/filled-button";
+import "@material/web/button/outlined-button";
 import "@material/web/button/tonal-button";
 
 import "@material/web/iconbutton/standard-icon-button";

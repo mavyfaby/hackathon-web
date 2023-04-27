@@ -1,13 +1,13 @@
 <template>
   <div class="container mx-auto">
     <div>
-      <h4>Welcome back Tech lead!</h4>
+      <h4>Welcome back {{ data.first_name }} {{ data.last_name }}</h4>
 
       <div class="grid grid-cols-2 gap-2 text-on-surface-variant w-1/2 mt-8 mb-4 text-sm">
         <p>Department:</p>
-        <p>{department}</p>
+        <p>{{ data.department_name }}</p>
         <p>Team name:</p>
-        <p>{team}</p>
+        <p>{{ data.team_name }}</p>
         <p>Lead name:</p>
         <p>{{ data.first_name }} {{ data.last_name }}</p>
       </div>

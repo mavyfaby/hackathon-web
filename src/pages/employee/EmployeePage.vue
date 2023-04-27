@@ -7,13 +7,13 @@
         <p>Department:</p>
         <p>{{ data.department_name }}</p>
         <p>Team name:</p>
-        <p>{team}</p>
+        <p>{{ data.team_name }}</p>
         <p>Lead name:</p>
         <p>{{ data.name }}</p>
         <p>Accumulated Pro-rated Attendance Bonus:</p>
         <p>{{ data.proattendancebonus }}</p>
         <p>Accumulated Pro-rated Hazard Pay:</p>
-        <p>{hazard_pay}</p>
+        <p>{{ data.hazardpay }}</p>
       </div>
 
       <div class="overflow-x-auto">
@@ -65,7 +65,11 @@ onMounted(() => {
       return;
     }
 
+    
+
     data.value = response.employee;
+
+    console.log(data.value);
   })
 });
 </script>

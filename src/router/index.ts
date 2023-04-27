@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { setPage } from "../utils/page";
 import { useStore } from "~/store";
+import { getStore } from "~/utils/storage";
 
 const routes = [
   {
@@ -74,6 +75,21 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.name == 'Login' || to.name == 'Landing') {
+    next();
+    return;
+  }
+
+  // If naa sa authenticated apge
+  if (getStore("id") == null || getStore("id")!.length === 0) {
+    next({ name: "Login" });
+    return;
+  }
+
+  next();
 });
 
 router.afterEach(to => {

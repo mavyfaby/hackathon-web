@@ -70,6 +70,11 @@ onMounted(() => {
       return;
     }
 
+    if (!res || res.length === 0) {
+      isLoading.value = false;
+      return; 
+    }
+    
     for (const d of res[0]) {
       data.value.push(d);
     }

@@ -1,4 +1,4 @@
-import type { Department, ShiftSchedule, Team } from "~/types";
+import type { Department, HazardPay, ShiftSchedule, Team } from "~/types";
 import { defineStore } from "pinia";
 
 type DialogParam = { title: string, content: string, actions: Action[] };
@@ -13,6 +13,7 @@ const useStore = defineStore("global", () => {
   const userId: number = -1;
   const appbarTitle: string = "Employee Tracker";
   const isFromLogout: boolean = false;
+  const isLoggedIn: boolean = false;
 
   const dialog = {
     user: {
@@ -56,7 +57,12 @@ const useStore = defineStore("global", () => {
       open: false
     },
     editHazardPay: {
-      open: false
+      open: false,
+      pay: {
+        id: -1,
+        area: "",
+        pay: 0,
+      } as HazardPay,
     },
     bonus: {
       open: false
@@ -107,7 +113,7 @@ const useStore = defineStore("global", () => {
   };
 
   return {
-    dark, dialog, appbarTitle, isFromLogout, userId
+    dark, dialog, appbarTitle, isFromLogout, userId, isLoggedIn
   };
 });
 

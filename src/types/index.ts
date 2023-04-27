@@ -21,3 +21,9 @@ export type ShiftSchedule = {
   fromTime: string;
   toTime: string;
 }
+
+export type HazardPay = {
+  id: number;
+  area: string;
+  pay: number;
+}
