@@ -10,6 +10,7 @@ type Action = { name: string, action: Function };
  */
 const useStore = defineStore("global", () => {
   const dark: boolean = false;
+  const userId: number = -1;
   const appbarTitle: string = "Employee Tracker";
   const isFromLogout: boolean = false;
 
@@ -106,7 +107,7 @@ const useStore = defineStore("global", () => {
   };
 
   return {
-    dark, dialog, appbarTitle, isFromLogout
+    dark, dialog, appbarTitle, isFromLogout, userId
   };
 });
 

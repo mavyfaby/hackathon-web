@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "~/store";
 
@@ -50,6 +50,7 @@ import VCard from "~/components/VCard.vue";
 import showToast from "~/utils/toast";
 import { TYPE } from "vue-toastification";
 import makeRequest, { Endpoints } from "~/network/request";
+import { setStore } from "~/utils/storage";
 
 const email = ref("");
 const pass = ref("");
@@ -58,6 +59,7 @@ const isLoading = ref(false);
 const loginLabel = ref("Login");
 
 const router = useRouter();
+const store = useStore();
 
 function login() {
   if (!email.value || !pass.value) {
@@ -87,15 +89,17 @@ function login() {
 
     const { type, id } = response;
 
+    setStore("id", id);
+
     switch (type) {
       case 1:
         router.push({ name: "Admin" });
         break;
       case 2:
-        router.push({ name: "Techlead" });
+        router.push({ name: "Employee" });
         break;
       case 3:
-        router.push({ name: "Employee" });
+        router.push({ name: "Techlead" });
         break;
     }
   });

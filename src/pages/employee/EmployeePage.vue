@@ -1,17 +1,17 @@
 <template>
   <div class="container mx-auto">
     <div>
-      <h4>Welcome back {name}!</h4>
+      <h4>Welcome back {{ data.name }}!</h4>
 
       <div class="grid grid-cols-2 gap-2 text-on-surface-variant my-10 text-sm">
         <p>Department:</p>
-        <p>{department}</p>
+        <p>{{ data.department_name }}</p>
         <p>Team name:</p>
         <p>{team}</p>
         <p>Lead name:</p>
-        <p>{lead}</p>
+        <p>{{ data.name }}</p>
         <p>Accumulated Pro-rated Attendance Bonus:</p>
-        <p>{bonus}</p>
+        <p>{{ data.proattendancebonus }}</p>
         <p>Accumulated Pro-rated Hazard Pay:</p>
         <p>{hazard_pay}</p>
       </div>
@@ -32,23 +32,14 @@
             </tr>
           </thead>
           <tbody>
-            <!-- <tr v-for="(user, i) in users" :key="i" class="border-b border-outline-variant">
-              <th scope="row" class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                {{ i + 1 }}
-              </th>
-              <td class="px-4 py-2">{{ user.name }}</td>
-              <td class="px-4 py-2">{{ user.type }}</td>
-              <td class="px-4 py-2 flex items-center justify-end">
-                <div class="flex justify-center space-x-2 actions">
-                  <button @click="onEdit(user)">
-                    <md-icon size="4">edit</md-icon>
-                  </button>
-                  <button @click="onDelete(user)">
-                    <md-icon>delete</md-icon>
-                  </button>
-                </div>
-              </td>
-            </tr>                     -->
+            <tr class="border-b border-outline-variant">
+              <td class="px-4 py-2">{{ data.shift_schedule }}</td>
+              <td class="px-4 py-2">{{ data.team_id }}</td>
+              <td class="px-4 py-2">{{ data.work_type == 0 ? 'Onsite' : 'WFH' }}</td>
+              <td class="px-4 py-2">{{ data.PTO == 0 ? 'Unplanned Leave' : 'Planned Leave' }}</td>
+              <td class="px-4 py-2">{{ data.holiday_off }}</td>
+              <td class="px-4 py-2">{{ data.location == 0 ? 'Outside Cebu' : 'Within Cebu' }}</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -57,7 +48,26 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from "vue";
+import { TYPE } from "vue-toastification";
+import makeRequest, { Endpoints } from "~/network/request";
+import { getStore } from "~/utils/storage";
+import showToast from "~/utils/toast";
 
+const data = ref({} as any);
+
+onMounted(() => {
+  const id = getStore("id");
+
+  makeRequest("GET", Endpoints.Employee, id, (err, response) => {
+    if (err) {
+      showToast(TYPE.ERROR, "Error fetching team lead data");
+      return;
+    }
+
+    data.value = response.employee;
+  })
+});
 </script>
 
 <style lang="scss" scoped>

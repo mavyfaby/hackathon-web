@@ -9,7 +9,7 @@
         <p>Team name:</p>
         <p>{team}</p>
         <p>Lead name:</p>
-        <p>{lead}</p>
+        <p>{{ data.first_name }} {{ data.last_name }}</p>
       </div>
 
       <div class="flex justify-end mb-4">
@@ -36,23 +36,15 @@
             </tr>
           </thead>
           <tbody>
-            <!-- <tr v-for="(user, i) in users" :key="i" class="border-b border-outline-variant">
-              <th scope="row" class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                {{ i + 1 }}
-              </th>
-              <td class="px-4 py-2">{{ user.name }}</td>
-              <td class="px-4 py-2">{{ user.type }}</td>
-              <td class="px-4 py-2 flex items-center justify-end">
-                <div class="flex justify-center space-x-2 actions">
-                  <button @click="onEdit(user)">
-                    <md-icon size="4">edit</md-icon>
-                  </button>
-                  <button @click="onDelete(user)">
-                    <md-icon>delete</md-icon>
-                  </button>
-                </div>
-              </td>
-            </tr>                     -->
+            <tr v-for="(emp, i) in data.employees" :key="i" class="border-b border-outline-variant">
+              <td class="px-4 py-2">{{ emp.employee_name }}</td>
+              <td class="px-4 py-2">{{ emp.shift_schedule }}</td>
+              <td class="px-4 py-2">{{ emp.group }}</td>
+              <td class="px-4 py-2">{{ emp.work_type == 0 ? 'Onsite' : 'WFH' }}</td>
+              <td class="px-4 py-2">{{ emp.PTO == 0 ? 'Unplanned Leave' : 'Planned Leave' }}</td>
+              <td class="px-4 py-2">{{ emp.holiday_off }}</td>
+              <td class="px-4 py-2">{{ emp.location == 0 ? 'Outside Cebu' : 'Within Cebu' }}</td>
+            </tr>                    
           </tbody>
         </table>
       </div>
@@ -61,7 +53,29 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from "vue";
+import { TYPE } from "vue-toastification";
+import makeRequest, { Endpoints } from "~/network/request";
+import { useStore } from "~/store";
+import { getStore } from "~/utils/storage";
+import showToast from "~/utils/toast";
 
+const data = ref({} as any);
+
+onMounted(() => {
+  const id = getStore("id");
+
+  makeRequest("GET", Endpoints.TeamLead, id, (err, response) => {
+    if (err) {
+      showToast(TYPE.ERROR, "Error fetching team lead data");
+      return;
+    }
+
+    console.log(response);
+
+    data.value = response;
+  })
+});
 </script>
 
 <style lang="scss" scoped>

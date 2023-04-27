@@ -43,7 +43,7 @@ function makeRequest(method: HttpMethod, endpoint: string, data: any, callback: 
     // Add data to config
     config.data = data;
   }
-
+  
   // Execute request
   instance(config).then((response) => {
     // Reset session
